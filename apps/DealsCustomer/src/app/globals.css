@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-green: #008000;
+  --brand-accent: #f5a623;
+}
+
+body {
+  background-color: #EEF7EE;
+  font-family: 'Inter', 'Poppins', system-ui, sans-serif;
+  color: #1f2937;
+}
+
+@layer utilities {
+  .text-brand-green { color: #008000; }
+  .text-brand-accent { color: #f5a623; }
+  .bg-brand-green { background-color: #008000; }
+  .bg-brand-accent { background-color: #f5a623; }
+  .border-brand-green { border-color: #008000; }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
