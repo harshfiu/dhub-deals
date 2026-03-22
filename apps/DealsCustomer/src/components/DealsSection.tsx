@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import DealCard from "./DealCard";
-import { DEALS } from "@/data/deals";
 import { Deal, DiscountType } from "@/types/deal";
 
 const FILTERS: { label: string; value: DiscountType | "all" }[] = [
@@ -12,13 +11,19 @@ const FILTERS: { label: string; value: DiscountType | "all" }[] = [
   { label: "Buy 1 Get 1", value: "bogo" },
 ];
 
-export default function DealsSection() {
+// Now accepts deals as a prop from page.tsx (which fetches from the API)
+// instead of importing the static DEALS array directly
+interface DealsSectionProps {
+  deals: Deal[];
+}
+
+export default function DealsSection({ deals }: DealsSectionProps) {
   const [activeFilter, setActiveFilter] = useState<DiscountType | "all">("all");
 
   const filtered: Deal[] =
     activeFilter === "all"
-      ? DEALS
-      : DEALS.filter((d) => d.discountType === activeFilter);
+      ? deals
+      : deals.filter((d) => d.discountType === activeFilter);
 
   return (
     <section id="deals" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">

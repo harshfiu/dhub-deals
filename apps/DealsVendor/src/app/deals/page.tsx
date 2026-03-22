@@ -1,21 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import DealCard from "@/components/DealCard";
-import { mockDeals, DealStatus } from "@/lib/mockData";
+import { fetchMyDeals } from "@/lib/api";
+import type { Deal } from "@/lib/api";
 
-type FilterTab = "All" | DealStatus;
+type FilterTab = "All" | "Active" | "Scheduled" | "Expired";
 
 const tabs: FilterTab[] = ["All", "Active", "Scheduled", "Expired"];
 
 export default function DealsPage() {
-  const [activeTab, setActiveTab] = useState<FilterTab>("All");
+  const [activeTab, setActiveTab]   = useState<FilterTab>("All");
+  const [deals, setDeals]           = useState<Deal[]>([]);
+  const [loading, setLoading]       = useState(true);
+
+  useEffect(() => {
+    fetchMyDeals()
+      .then(setDeals)
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
 
   const filtered =
     activeTab === "All"
-      ? mockDeals
-      : mockDeals.filter((d) => d.status === activeTab);
+      ? deals
+      : deals.filter((d) => d.status === activeTab);
+
+  if (loading) return <p className="text-gray-400 text-sm p-4">Loading deals…</p>;
 
   return (
     <div>
@@ -46,8 +58,8 @@ export default function DealsPage() {
           const isActive = activeTab === tab;
           const count =
             tab === "All"
-              ? mockDeals.length
-              : mockDeals.filter((d) => d.status === tab).length;
+              ? deals.length
+              : deals.filter((d) => d.status === tab).length;
 
           return (
             <button

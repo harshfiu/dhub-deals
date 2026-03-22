@@ -1,32 +1,25 @@
-import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
-import DealsSection from "@/components/DealsSection";
-import BottomNav from "@/components/BottomNav";
+// ============================================================
+// DealsCustomer/src/app/page.tsx  ← UPDATE to this
+// ============================================================
+// Before: imported static deals from data/deals.ts
+// After:  async Server Component — fetches from the API
+//
+// No changes needed in HeroSection.tsx or DealsSection.tsx.
+// ============================================================
 
-export default function DealsPage() {
+import HeroSection   from '@/components/HeroSection';
+import DealsSection  from '@/components/DealsSection';
+import { getDeals }  from '@/data/deals';
+
+export default async function HomePage() {
+  // Runs on the server — the browser never calls the API directly.
+  // Next.js caches this and revalidates every 60 seconds (see deals.ts).
+  const deals = await getDeals();
+
   return (
-    <main className="min-h-screen bg-[#EEF7EE] pb-16 sm:pb-0">
-      <Navbar />
+    <main>
       <HeroSection />
-      {/* Subtle divider */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <hr className="border-gray-200" />
-      </div>
-      <DealsSection />
-
-      <BottomNav />
-
-      {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white mt-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center">
-            <img src="/logo.svg" alt="DHub Deals" className="h-7 w-auto" />
-          </div>
-          <p className="text-xs text-gray-400">
-            © {new Date().getFullYear()} DHub. Customers always browse free.
-          </p>
-        </div>
-      </footer>
+      <DealsSection deals={deals} />
     </main>
   );
 }
