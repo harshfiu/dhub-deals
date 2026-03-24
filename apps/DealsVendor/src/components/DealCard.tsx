@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Deal } from "@/lib/mockData";
+import { useRouter } from "next/navigation";
+import type { Deal } from "@/lib/api";
 
 interface DealCardProps {
   deal: Deal;
 }
 
-// Deterministic color palette for card header backgrounds
 const cardColors = [
   { bg: "#1a3a5c", pattern: "#1e4570" },
   { bg: "#2d4a22", pattern: "#345528" },
@@ -33,41 +33,35 @@ function EyeIcon() {
 }
 
 const statusConfig = {
-  Active: { label: "Active", bg: "bg-emerald-100", text: "text-emerald-700", dot: "bg-emerald-500" },
-  Scheduled: { label: "Scheduled", bg: "bg-blue-100", text: "text-blue-700", dot: "bg-blue-500" },
-  Expired: { label: "Expired", bg: "bg-gray-100", text: "text-gray-500", dot: "bg-gray-400" },
+  Active:    { label: "Active",    bg: "bg-emerald-100", text: "text-emerald-700", dot: "bg-emerald-500" },
+  Scheduled: { label: "Scheduled", bg: "bg-blue-100",    text: "text-blue-700",    dot: "bg-blue-500"    },
+  Expired:   { label: "Expired",   bg: "bg-gray-100",    text: "text-gray-500",    dot: "bg-gray-400"    },
 };
 
 function discountLabel(deal: Deal): string {
   if (deal.discountType === "percentage") return `${deal.discountValue}% OFF`;
-  if (deal.discountType === "flat") return `$${deal.discountValue} OFF`;
+  if (deal.discountType === "flat")       return `$${deal.discountValue} OFF`;
   return "BOGO";
 }
 
 export default function DealCard({ deal }: DealCardProps) {
+  const router = useRouter();
   const [isActive, setIsActive] = useState(deal.status === "Active");
+
   const colorIndex = deal.id % cardColors.length;
-  const color = cardColors[colorIndex];
-  const status = statusConfig[deal.status];
+  const color      = cardColors[colorIndex];
+  const status     = statusConfig[deal.status];
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
-      {/* Card header with colored background */}
+      {/* Card header */}
       <div
         className="relative h-32 flex items-center justify-center"
         style={{ backgroundColor: color.bg }}
       >
-        {/* Decorative circles */}
-        <div
-          className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-30"
-          style={{ backgroundColor: color.pattern }}
-        />
-        <div
-          className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full opacity-20"
-          style={{ backgroundColor: color.pattern }}
-        />
+        <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-30" style={{ backgroundColor: color.pattern }} />
+        <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full opacity-20" style={{ backgroundColor: color.pattern }} />
 
-        {/* Discount badge */}
         <span
           className="relative z-10 px-4 py-2 rounded-full text-white font-bold text-lg tracking-wide"
           style={{ backgroundColor: "#EF9D39" }}
@@ -75,10 +69,7 @@ export default function DealCard({ deal }: DealCardProps) {
           {discountLabel(deal)}
         </span>
 
-        {/* Status badge top-right */}
-        <span
-          className={`absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${status.bg} ${status.text}`}
-        >
+        <span className={`absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${status.bg} ${status.text}`}>
           <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
           {status.label}
         </span>
@@ -99,9 +90,7 @@ export default function DealCard({ deal }: DealCardProps) {
           <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          <span>
-            {deal.status === "Expired" ? "Expired" : "Expires"}: {deal.expiry}
-          </span>
+          <span>{deal.status === "Expired" ? "Expired" : "Expires"}: {deal.expiry}</span>
         </div>
 
         <div className="flex items-center gap-1 text-xs text-gray-500">
@@ -112,6 +101,7 @@ export default function DealCard({ deal }: DealCardProps) {
         {/* Actions */}
         <div className="flex items-center gap-2 mt-auto pt-3 border-t border-gray-100">
           <button
+            onClick={() => router.push(`/deals/${deal._id}/edit`)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white transition-colors"
             style={{ backgroundColor: "#3E867A" }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#2d6b60")}
@@ -129,11 +119,7 @@ export default function DealCard({ deal }: DealCardProps) {
                 : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
             }`}
           >
-            <span
-              className={`w-3 h-3 rounded-full inline-block ${
-                isActive ? "bg-gray-400" : "bg-emerald-500"
-              }`}
-            />
+            <span className={`w-3 h-3 rounded-full inline-block ${isActive ? "bg-gray-400" : "bg-emerald-500"}`} />
             {isActive ? "Deactivate" : "Activate"}
           </button>
         </div>

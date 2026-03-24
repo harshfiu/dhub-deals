@@ -1,0 +1,58 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Vendor {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  password       String
+  restaurantName String
+  logoUrl        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  deals Deal[]
+}
+
+model Deal {
+  id            String       @id @default(cuid())
+  title         String
+  description   String
+  terms         String?
+  discountType  DiscountType
+  discountValue Float
+  startDate     DateTime
+  endDate       DateTime
+  status        DealStatus   @default(Scheduled)
+  tags          String[]     @default([])
+
+  views         Int          @default(0)
+  clicks        Int          @default(0)
+  redemptions   Int          @default(0)
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  vendorId      String
+  vendor        Vendor       @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@index([vendorId])
+  @@index([status])
+}
+
+enum DiscountType {
+  percentage
+  flat
+  bogo
+}
+
+enum DealStatus {
+  Active
+  Scheduled
+  Expired
+}

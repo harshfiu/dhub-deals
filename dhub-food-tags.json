@@ -1,0 +1,109 @@
+[
+    { "id": "butter_naan", "name": "Butter Naan", "category": "popular" },
+    { "id": "garlic_naan", "name": "Garlic Naan", "category": "popular" },
+    { "id": "plain_roti", "name": "Plain Roti", "category": "popular" },
+    { "id": "lachha_paratha", "name": "Lachha Paratha", "category": "popular" },
+    { "id": "rumali_roti", "name": "Rumali Roti", "category": "popular" },
+  
+    { "id": "kadai_chicken", "name": "Kadai Chicken", "category": "popular" },
+    { "id": "chicken_hand", "name": "Chicken Handi", "category": "popular" },
+    { "id": "chicken_korma", "name": "Chicken Korma", "category": "popular" },
+    { "id": "chicken_do_pyaza", "name": "Chicken Do Pyaza", "category": "popular" },
+    { "id": "chicken_saag", "name": "Chicken Saag", "category": "popular" },
+  
+    { "id": "mutton_korma", "name": "Mutton Korma", "category": "popular" },
+    { "id": "mutton_rogan_josh", "name": "Mutton Rogan Josh", "category": "popular" },
+    { "id": "mutton_hand", "name": "Mutton Handi", "category": "popular" },
+  
+    { "id": "fish_fry", "name": "Fish Fry", "category": "popular" },
+    { "id": "fish_tikka", "name": "Fish Tikka", "category": "popular" },
+  
+    { "id": "paneer_chilli", "name": "Paneer Chilli", "category": "popular" },
+    { "id": "paneer_do_pyaza", "name": "Paneer Do Pyaza", "category": "popular" },
+  
+    { "id": "veg_fried_rice", "name": "Veg Fried Rice", "category": "popular" },
+    { "id": "egg_fried_rice", "name": "Egg Fried Rice", "category": "popular" },
+    { "id": "chicken_fried_rice", "name": "Chicken Fried Rice", "category": "popular" },
+  
+    { "id": "veg_noodles", "name": "Veg Noodles", "category": "popular" },
+    { "id": "egg_noodles", "name": "Egg Noodles", "category": "popular" },
+    { "id": "chicken_noodles", "name": "Chicken Noodles", "category": "popular" },
+  
+    { "id": "margherita_pizza", "name": "Margherita Pizza", "category": "popular" },
+    { "id": "farmhouse_pizza", "name": "Farmhouse Pizza", "category": "popular" },
+    { "id": "pepperoni_pizza", "name": "Pepperoni Pizza", "category": "popular" },
+  
+    { "id": "veg_burger", "name": "Veg Burger", "category": "popular" },
+    { "id": "chicken_burger", "name": "Chicken Burger", "category": "popular" },
+  
+    { "id": "club_sandwich", "name": "Club Sandwich", "category": "popular" },
+    { "id": "grilled_sandwich", "name": "Grilled Sandwich", "category": "popular" },
+  
+    { "id": "chicken_roll", "name": "Chicken Roll", "category": "popular" },
+    { "id": "paneer_roll", "name": "Paneer Roll", "category": "popular" },
+    { "id": "egg_roll", "name": "Egg Roll", "category": "popular" },
+  
+    { "id": "falooda", "name": "Falooda", "category": "dessert" },
+    { "id": "brownie", "name": "Brownie", "category": "dessert" },
+    { "id": "cake", "name": "Cake", "category": "dessert" },
+  
+    { "id": "tea", "name": "Tea", "category": "beverages" },
+    { "id": "coffee", "name": "Coffee", "category": "beverages" },
+    { "id": "soft_drinks", "name": "Soft Drinks", "category": "beverages" },
+    { "id": "smoothies", "name": "Smoothies", "category": "beverages" },
+  
+    { "id": "north_indian_thali", "name": "North Indian Thali", "category": "meal_type" },
+    { "id": "south_indian_thali", "name": "South Indian Thali", "category": "meal_type" },
+  
+    { "id": "buffet", "name": "Buffet", "category": "service" },
+    { "id": "catering", "name": "Catering", "category": "service" },
+  
+    { "id": "kids_meal", "name": "Kids Meal", "category": "meal_type" },
+  
+    { "id": "quick_delivery", "name": "Quick Delivery", "category": "service" },
+    { "id": "free_delivery", "name": "Free Delivery", "category": "offer" },
+  
+    { "id": "buy_one_get_one", "name": "Buy 1 Get 1", "category": "offer" },
+    { "id": "discount_offer", "name": "Discount Offer", "category": "offer" },
+  
+    { "id": "spicy_food", "name": "Spicy Food", "category": "flavor" },
+    { "id": "extra_spicy", "name": "Extra Spicy", "category": "flavor" },
+    { "id": "less_spicy", "name": "Less Spicy", "category": "flavor" },
+  
+    { "id": "comfort_food", "name": "Comfort Food", "category": "style" },
+    { "id": "street_style", "name": "Street Style", "category": "style" },
+  
+    { "id": "healthy_food", "name": "Healthy Food", "category": "diet" },
+    { "id": "low_calorie", "name": "Low Calorie", "category": "diet" },
+  
+    { "id": "weekend_special", "name": "Weekend Special", "category": "occasion" },
+    { "id": "festival_special", "name": "Festival Special", "category": "occasion" },
+  
+    { "id": "lunch_combo", "name": "Lunch Combo", "category": "meal_type" },
+    { "id": "dinner_combo", "name": "Dinner Combo", "category": "meal_type" },
+  
+    { "id": "office_lunch", "name": "Office Lunch", "category": "occasion" },
+    { "id": "family_pack", "name": "Family Pack", "category": "occasion" },
+  
+    { "id": "mini_meal", "name": "Mini Meal", "category": "meal_type" },
+    { "id": "value_meal", "name": "Value Meal", "category": "meal_type" },
+  
+    { "id": "late_night_food", "name": "Late Night Food", "category": "occasion" },
+    { "id": "midnight_delivery", "name": "Midnight Delivery", "category": "service" },
+  
+    { "id": "premium_dining", "name": "Premium Dining", "category": "price" },
+    { "id": "affordable", "name": "Affordable", "category": "price" },
+  
+    { "id": "quick_bites", "name": "Quick Bites", "category": "meal_type" },
+  
+    { "id": "best_for_couples", "name": "Best for Couples", "category": "occasion" },
+    { "id": "group_order", "name": "Group Order", "category": "occasion" },
+  
+    { "id": "takeaway_special", "name": "Takeaway Special", "category": "service" },
+  
+    { "id": "chef_special", "name": "Chef Special", "category": "offer" },
+    { "id": "limited_time", "name": "Limited Time Offer", "category": "offer" },
+  
+    { "id": "new_arrival", "name": "New Arrival", "category": "offer" },
+    { "id": "trending", "name": "Trending", "category": "offer" }
+  ]

@@ -1,128 +1,59 @@
-import { Deal } from "@/types/deal";
+// ============================================================
+// DealsCustomer/src/data/deals.ts
+// ============================================================
 
-export const DEALS: Deal[] = [
-  {
-    id: "1",
-    title: "Lemon Chicken Orzo Bowl",
-    discountType: "percentage",
-    discountValue: "20% Off",
-    description:
-      "Lemon chicken served with lemon orzo rice and topped with veggies all in one bowl!",
-    terms: "Valid once per customer per day. Cannot be combined with other offers.",
-    startDate: "2026-03-24",
-    endDate: "2026-03-26",
-    orderTill: "2026-03-25T21:23:00",
-    deliveryTime: "2026-03-26T00:00:00",
-    imageUrl:
-      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80",
-    price: 10.99,
-    quantityLeft: 10,
-    includes: ["Lemon chicken", "Lemon orzo rice", "Tomatoes", "Cucumber", "Olives"],
-    dietType: "Keto",
-    restaurant: {
-      name: "Rhia's Halal Mediterranean",
-      logoUrl:
-        "https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=80&q=80",
-      address: "142 West 36th St, Garland, TX 75040",
-      location: "Garland, Texas",
-      phone: "+1 (972) 555-0192",
-      websiteUrl: "https://example.com/rhias",
-      cuisineTag: "Mediterranean",
-      rating: 4.7,
-      itemCount: 4,
-    },
-  },
-  {
-    id: "2",
-    title: "Mediterranean Vegetarian Bowl",
-    discountType: "bogo",
-    discountValue: "Buy 1 Get 1",
-    description:
-      "Mediterranean diet. Vegetarian bowl. Served over rice. Yummilicious!",
-    terms: "Valid on dine-in and takeaway only. Weekdays only.",
-    startDate: "2026-03-24",
-    endDate: "2026-03-26",
-    orderTill: "2026-03-25T20:30:00",
-    deliveryTime: "2026-03-26T00:00:00",
-    imageUrl:
-      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80",
-    price: 10.99,
-    quantityLeft: 10,
-    includes: ["Beans", "Tomatoes", "Onions", "Rice", "Falafel"],
-    dietType: "Vegetarian",
-    restaurant: {
-      name: "Rhia's Halal Mediterranean",
-      logoUrl:
-        "https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=80&q=80",
-      address: "142 West 36th St, Garland, TX 75040",
-      location: "Garland, Texas",
-      phone: "+1 (972) 555-0192",
-      websiteUrl: "https://example.com/rhias",
-      cuisineTag: "Mediterranean",
-      rating: 4.7,
-      itemCount: 4,
-    },
-  },
-  {
-    id: "3",
-    title: "Butter Chicken with Rice and Salad",
-    discountType: "flat",
-    discountValue: "$5 Off",
-    description:
-      "Fresh butter chicken, rich and satisfying. Served with rice and a veg patty. Salad and more.",
-    terms: "Minimum spend $30. Valid for dine-in and online orders.",
-    startDate: "2026-03-23",
-    endDate: "2026-03-24",
-    orderTill: "2026-03-24T20:30:00",
-    deliveryTime: "2026-03-25T00:00:00",
-    imageUrl:
-      "https://images.unsplash.com/photo-1565557623262-b51c2513a641?w=600&q=80",
-    price: 12.99,
-    quantityLeft: 10,
-    includes: ["Butter chicken", "Rice", "Veg patty", "Garden salad", "Naan"],
-    dietType: "Keto",
-    restaurant: {
-      name: "Rhia's Halal Mediterranean",
-      logoUrl:
-        "https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=80&q=80",
-      address: "142 West 36th St, Garland, TX 75040",
-      location: "Garland, Texas",
-      phone: "+1 (972) 555-0192",
-      websiteUrl: "https://example.com/rhias",
-      cuisineTag: "Mediterranean",
-      rating: 4.7,
-      itemCount: 4,
-    },
-  },
-  {
-    id: "4",
-    title: "Mediterranean Chicken Veggie Bowl",
-    discountType: "percentage",
-    discountValue: "15% Off",
-    description:
-      "Mediterranean chicken and bean bowl. With white sauce. High-protein.",
-    terms: "One dessert per main course ordered. Dine-in only.",
-    startDate: "2026-03-23",
-    endDate: "2026-03-24",
-    orderTill: "2026-03-24T20:30:00",
-    deliveryTime: "2026-03-25T00:00:00",
-    imageUrl:
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80",
-    price: 12.99,
-    quantityLeft: 10,
-    includes: ["Chicken", "Beans", "Corn", "White sauce", "Rice", "Peppers", "Onions", "Tomatoes"],
-    dietType: "Keto",
-    restaurant: {
-      name: "Rhia's Halal Mediterranean",
-      logoUrl:
-        "https://images.unsplash.com/photo-1590947132387-155cc02f3212?w=80&q=80",
-      address: "142 West 36th St, Garland, TX 75040",
-      location: "Garland, Texas",
-      phone: "+1 (972) 555-0192",
-      websiteUrl: "https://example.com/rhias",
-      cuisineTag: "Mediterranean",
-      rating: 4.7,
-      itemCount: 4,
-    },
-  },
-];
+import type { Deal } from "@/types/deal";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+
+export async function getDeals(): Promise<Deal[]> {
+  try {
+    const res = await fetch(`${API_URL}/api/deals/public`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch deals");
+
+    const data = await res.json();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return data.deals.map((d: any): Deal => ({
+      id:            d.id,
+      title:         d.title,
+      description:   d.description,
+      terms:         d.terms ?? "",
+      discountType:  d.discountType,
+      discountValue:
+        d.discountType === "percentage" ? `${d.discountValue}%` :
+        d.discountType === "flat"       ? `$${d.discountValue} off` :
+                                          "Buy 1 Get 1",
+      startDate:  d.startDate,
+      endDate:    d.endDate,
+      imageUrl:   d.imageUrl ?? "https://placehold.co/600x300/e8f5e9/008000?text=Deal",
+      restaurant: {
+        name:       d.vendor?.restaurantName ?? "Restaurant",
+        logoUrl:    d.vendor?.logoUrl        ?? "https://placehold.co/100x100/008000/white?text=R",
+        address:    d.vendor?.address        ?? "123 Main St",
+        phone:      d.vendor?.phone          ?? "555-0000",
+        websiteUrl: d.vendor?.websiteUrl,
+        cuisineTag: d.vendor?.cuisineTag     ?? "Food",
+        rating:     d.vendor?.rating         ?? 4.5,
+      },
+    }));
+  } catch (error) {
+    console.error("getDeals error:", error);
+    return [];
+  }
+}
+
+export async function trackView(dealId: string) {
+  await fetch(`${API_URL}/api/deals/${dealId}/stats/view`, { method: "POST" }).catch(() => {});
+}
+
+export async function trackClick(dealId: string) {
+  await fetch(`${API_URL}/api/deals/${dealId}/stats/click`, { method: "POST" }).catch(() => {});
+}
+
+export async function trackRedemption(dealId: string) {
+  await fetch(`${API_URL}/api/deals/${dealId}/stats/redeem`, { method: "POST" }).catch(() => {});
+}
