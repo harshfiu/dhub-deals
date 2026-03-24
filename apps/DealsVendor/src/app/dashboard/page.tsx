@@ -7,10 +7,10 @@ import type { Deal, Vendor } from "@/lib/api";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [vendor, setVendor]   = useState<Vendor | null>(null);
-  const [deals, setDeals]     = useState<Deal[]>([]);
+  const [vendor,  setVendor]  = useState<Vendor | null>(null);
+  const [deals,   setDeals]   = useState<Deal[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState<string | null>(null);
+  const [error,   setError]   = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -22,7 +22,6 @@ export default function DashboardPage() {
         setVendor(currentVendor);
         setDeals(myDeals);
       } catch {
-        // No token or expired — go to login, don't loop
         router.replace("/login");
       } finally {
         setLoading(false);
@@ -49,10 +48,11 @@ export default function DashboardPage() {
   if (loading) return <p className="p-8 text-center text-gray-400">Loading…</p>;
 
   return (
-    <main className="p-6 max-w-4xl mx-auto">
+    <div>
+      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold">{vendor?.restaurantName}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{vendor?.restaurantName}</h1>
           <p className="text-sm text-gray-500">{vendor?.email}</p>
         </div>
         <div className="flex gap-3">
@@ -65,7 +65,7 @@ export default function DashboardPage() {
           </button>
           <button
             onClick={handleLogout}
-            className="border px-4 py-2 rounded-lg text-sm"
+            className="border px-4 py-2 rounded-lg text-sm text-gray-600"
           >
             Log out
           </button>
@@ -76,6 +76,15 @@ export default function DashboardPage() {
         <p className="mb-4 text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
       )}
 
+      {/* Summary cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <SummaryCard label="Total Deals"   value={deals.length} />
+        <SummaryCard label="Active"        value={deals.filter((d) => d.status === "Active").length} />
+        <SummaryCard label="Total Views"   value={deals.reduce((s, d) => s + d.views, 0)} />
+        <SummaryCard label="Redemptions"   value={deals.reduce((s, d) => s + d.redemptions, 0)} />
+      </div>
+
+      {/* Deals list */}
       {deals.length === 0 ? (
         <p className="text-gray-400 text-center py-16">
           No deals yet.{" "}
@@ -84,52 +93,62 @@ export default function DashboardPage() {
           </button>
         </p>
       ) : (
-        <div className="space-y-3">
-          {deals.map((deal) => (
-            <div key={deal.id} className="border rounded-xl p-4 flex items-center justify-between">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="font-medium truncate">{deal.title}</span>
-                  <StatusBadge status={deal.status} />
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100">
+            <h2 className="text-sm font-semibold text-gray-900">Your Deals</h2>
+          </div>
+          <div className="divide-y divide-gray-50">
+            {deals.map((deal) => (
+              <div key={deal._id} className="px-6 py-4 flex items-center justify-between hover:bg-gray-50 transition-colors">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-gray-900 truncate">{deal.title}</span>
+                    <StatusBadge status={deal.status} />
+                  </div>
+                  <p className="text-sm text-gray-400 mt-0.5">
+                    {deal.discountDetails} · {deal.views} views · {deal.clicks} clicks · {deal.redemptions} redeemed
+                  </p>
                 </div>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  {deal.discountType === "percentage" && `${deal.discountValue}% off`}
-                  {deal.discountType === "flat"       && `$${deal.discountValue} off`}
-                  {deal.discountType === "bogo"       && "Buy One Get One"}
-                  {" · "}
-                  {deal.views} views · {deal.clicks} clicks · {deal.redemptions} redeemed
-                </p>
+                <div className="flex gap-2 ml-4 shrink-0">
+                  <button
+                    onClick={() => router.push(`/deals/${deal._id}/edit`)}
+                    className="text-sm border border-gray-200 px-3 py-1.5 rounded-lg text-gray-600 hover:border-[#3E867A] hover:text-[#3E867A] transition-colors"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(deal._id)}
+                    className="text-sm border border-red-100 text-red-500 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-              <div className="flex gap-2 ml-4 shrink-0">
-                <button
-                  onClick={() => router.push(`/deals/${deal.id}/edit`)}
-                  className="text-sm border px-3 py-1.5 rounded-lg"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(deal._id)}
-                  className="text-sm border border-red-200 text-red-600 px-3 py-1.5 rounded-lg"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
-    </main>
+    </div>
+  );
+}
+
+function SummaryCard({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+      <p className="text-xs text-gray-400 font-medium uppercase tracking-wide mb-1">{label}</p>
+      <p className="text-3xl font-bold text-gray-900">{value.toLocaleString()}</p>
+    </div>
   );
 }
 
 function StatusBadge({ status }: { status: Deal["status"] }) {
   const styles = {
-    Active:    "bg-green-100 text-green-700",
-    Scheduled: "bg-yellow-100 text-yellow-700",
+    Active:    "bg-emerald-100 text-emerald-700",
+    Scheduled: "bg-blue-100 text-blue-700",
     Expired:   "bg-gray-100 text-gray-500",
   };
   return (
-    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${styles[status]}`}>
+    <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${styles[status]}`}>
       {status}
     </span>
   );

@@ -1,16 +1,3 @@
-// ============================================================
-// prisma/schema.prisma
-// ============================================================
-// Defines the two data models used across both frontend apps.
-//
-// Vendor → maps to the auth used by DealsVendor
-// Deal   → maps to the Deal type in DealsCustomer/src/types/deal.ts
-//
-// After any change here run:
-//   npm run db:generate   (update Prisma Client)
-//   npm run db:migrate    (apply to database)
-// ============================================================
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,7 +10,7 @@ datasource db {
 model Vendor {
   id             String   @id @default(cuid())
   email          String   @unique
-  password       String                        // bcrypt hash — never plain text
+  password       String
   restaurantName String
   logoUrl        String?
   createdAt      DateTime @default(now())
@@ -42,8 +29,8 @@ model Deal {
   startDate     DateTime
   endDate       DateTime
   status        DealStatus   @default(Scheduled)
+  tags          String[]     @default([])
 
-  // Analytics counters — atomically incremented via /stats endpoints
   views         Int          @default(0)
   clicks        Int          @default(0)
   redemptions   Int          @default(0)
@@ -51,7 +38,6 @@ model Deal {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
-  // Relation: every deal belongs to one vendor
   vendorId      String
   vendor        Vendor       @relation(fields: [vendorId], references: [id], onDelete: Cascade)
 
@@ -60,9 +46,9 @@ model Deal {
 }
 
 enum DiscountType {
-  percentage // "20% off"
-  flat       // "$5 off"
-  bogo       // Buy One Get One
+  percentage
+  flat
+  bogo
 }
 
 enum DealStatus {

@@ -1,108 +1,109 @@
 [
-  { "id": "south_indian", "name": "South Indian", "category": "cuisine" },
-  { "id": "north_indian", "name": "North Indian", "category": "cuisine" },
-  { "id": "chinese", "name": "Chinese", "category": "cuisine" },
-  { "id": "indo_chinese", "name": "Indo-Chinese", "category": "cuisine" },
-  { "id": "italian", "name": "Italian", "category": "cuisine" },
-  { "id": "mexican", "name": "Mexican", "category": "cuisine" },
-  { "id": "thai", "name": "Thai", "category": "cuisine" },
-  { "id": "japanese", "name": "Japanese", "category": "cuisine" },
-  { "id": "korean", "name": "Korean", "category": "cuisine" },
-  { "id": "continental", "name": "Continental", "category": "cuisine" },
-  { "id": "mediterranean", "name": "Mediterranean", "category": "cuisine" },
-  { "id": "american", "name": "American", "category": "cuisine" },
-  { "id": "arabic", "name": "Arabic", "category": "cuisine" },
-  { "id": "turkish", "name": "Turkish", "category": "cuisine" },
-  { "id": "lebanese", "name": "Lebanese", "category": "cuisine" },
-  { "id": "afghani", "name": "Afghani", "category": "cuisine" },
-  { "id": "french", "name": "French", "category": "cuisine" },
-  { "id": "spanish", "name": "Spanish", "category": "cuisine" },
-
-  { "id": "barbecue", "name": "Barbecue", "category": "cooking_style" },
-  { "id": "grilled", "name": "Grilled", "category": "cooking_style" },
-  { "id": "fried", "name": "Fried", "category": "cooking_style" },
-  { "id": "baked", "name": "Baked", "category": "cooking_style" },
-  { "id": "roasted", "name": "Roasted", "category": "cooking_style" },
-  { "id": "steamed", "name": "Steamed", "category": "cooking_style" },
-  { "id": "sauteed", "name": "Sauteed", "category": "cooking_style" },
-  { "id": "stir_fried", "name": "Stir Fried", "category": "cooking_style" },
-  { "id": "slow_cooked", "name": "Slow Cooked", "category": "cooking_style" },
-  { "id": "tandoor", "name": "Tandoor", "category": "cooking_style" },
-  { "id": "smoked", "name": "Smoked", "category": "cooking_style" },
-
-  { "id": "vegetarian", "name": "Vegetarian", "category": "diet" },
-  { "id": "vegan", "name": "Vegan", "category": "diet" },
-  { "id": "eggetarian", "name": "Eggetarian", "category": "diet" },
-  { "id": "non_vegetarian", "name": "Non-Vegetarian", "category": "diet" },
-  { "id": "jain", "name": "Jain", "category": "diet" },
-  { "id": "halal", "name": "Halal", "category": "diet" },
-  { "id": "gluten_free", "name": "Gluten Free", "category": "diet" },
-  { "id": "dairy_free", "name": "Dairy Free", "category": "diet" },
-  { "id": "keto", "name": "Keto", "category": "diet" },
-  { "id": "low_carb", "name": "Low Carb", "category": "diet" },
-  { "id": "high_protein", "name": "High Protein", "category": "diet" },
-  { "id": "low_fat", "name": "Low Fat", "category": "diet" },
-  { "id": "organic", "name": "Organic", "category": "diet" },
-
-  { "id": "breakfast", "name": "Breakfast", "category": "meal_type" },
-  { "id": "brunch", "name": "Brunch", "category": "meal_type" },
-  { "id": "lunch", "name": "Lunch", "category": "meal_type" },
-  { "id": "dinner", "name": "Dinner", "category": "meal_type" },
-  { "id": "snacks", "name": "Snacks", "category": "meal_type" },
-  { "id": "dessert", "name": "Dessert", "category": "meal_type" },
-  { "id": "street_food", "name": "Street Food", "category": "meal_type" },
-  { "id": "fast_food", "name": "Fast Food", "category": "meal_type" },
-  { "id": "beverages", "name": "Beverages", "category": "meal_type" },
-
-  { "id": "spicy", "name": "Spicy", "category": "flavor" },
-  { "id": "sweet", "name": "Sweet", "category": "flavor" },
-  { "id": "savory", "name": "Savory", "category": "flavor" },
-  { "id": "tangy", "name": "Tangy", "category": "flavor" },
-  { "id": "bitter", "name": "Bitter", "category": "flavor" },
-  { "id": "umami", "name": "Umami", "category": "flavor" },
-  { "id": "mild", "name": "Mild", "category": "flavor" },
-
-  { "id": "starter", "name": "Starter", "category": "course" },
-  { "id": "main_course", "name": "Main Course", "category": "course" },
-  { "id": "side_dish", "name": "Side Dish", "category": "course" },
-  { "id": "appetizer", "name": "Appetizer", "category": "course" },
-  { "id": "soup", "name": "Soup", "category": "course" },
-  { "id": "salad", "name": "Salad", "category": "course" },
-
-  { "id": "chicken", "name": "Chicken", "category": "ingredient" },
-  { "id": "mutton", "name": "Mutton", "category": "ingredient" },
-  { "id": "seafood", "name": "Seafood", "category": "ingredient" },
-  { "id": "fish", "name": "Fish", "category": "ingredient" },
-  { "id": "prawns", "name": "Prawns", "category": "ingredient" },
-  { "id": "egg", "name": "Egg", "category": "ingredient" },
-  { "id": "paneer", "name": "Paneer", "category": "ingredient" },
-  { "id": "rice", "name": "Rice", "category": "ingredient" },
-  { "id": "noodles", "name": "Noodles", "category": "ingredient" },
-  { "id": "bread", "name": "Bread", "category": "ingredient" },
-
-  { "id": "dine_in", "name": "Dine-In", "category": "service" },
-  { "id": "takeaway", "name": "Takeaway", "category": "service" },
-  { "id": "delivery", "name": "Delivery", "category": "service" },
-
-  { "id": "biryani", "name": "Biryani", "category": "popular" },
-  { "id": "pizza", "name": "Pizza", "category": "popular" },
-  { "id": "burger", "name": "Burger", "category": "popular" },
-  { "id": "pasta", "name": "Pasta", "category": "popular" },
-  { "id": "sandwich", "name": "Sandwich", "category": "popular" },
-  { "id": "rolls", "name": "Rolls", "category": "popular" },
-  { "id": "wraps", "name": "Wraps", "category": "popular" },
-  { "id": "shawarma", "name": "Shawarma", "category": "popular" },
-  { "id": "momos", "name": "Momos", "category": "popular" },
-  { "id": "dosa", "name": "Dosa", "category": "popular" },
-  { "id": "idli", "name": "Idli", "category": "popular" },
-  { "id": "noodle_bowl", "name": "Noodle Bowl", "category": "popular" },
-
-  { "id": "party", "name": "Party", "category": "occasion" },
-  { "id": "family_meal", "name": "Family Meal", "category": "occasion" },
-  { "id": "quick_bites", "name": "Quick Bites", "category": "occasion" },
-  { "id": "late_night", "name": "Late Night", "category": "occasion" },
-
-  { "id": "budget", "name": "Budget", "category": "price" },
-  { "id": "mid_range", "name": "Mid Range", "category": "price" },
-  { "id": "premium", "name": "Premium", "category": "price" }
-]
+    { "id": "butter_naan", "name": "Butter Naan", "category": "popular" },
+    { "id": "garlic_naan", "name": "Garlic Naan", "category": "popular" },
+    { "id": "plain_roti", "name": "Plain Roti", "category": "popular" },
+    { "id": "lachha_paratha", "name": "Lachha Paratha", "category": "popular" },
+    { "id": "rumali_roti", "name": "Rumali Roti", "category": "popular" },
+  
+    { "id": "kadai_chicken", "name": "Kadai Chicken", "category": "popular" },
+    { "id": "chicken_hand", "name": "Chicken Handi", "category": "popular" },
+    { "id": "chicken_korma", "name": "Chicken Korma", "category": "popular" },
+    { "id": "chicken_do_pyaza", "name": "Chicken Do Pyaza", "category": "popular" },
+    { "id": "chicken_saag", "name": "Chicken Saag", "category": "popular" },
+  
+    { "id": "mutton_korma", "name": "Mutton Korma", "category": "popular" },
+    { "id": "mutton_rogan_josh", "name": "Mutton Rogan Josh", "category": "popular" },
+    { "id": "mutton_hand", "name": "Mutton Handi", "category": "popular" },
+  
+    { "id": "fish_fry", "name": "Fish Fry", "category": "popular" },
+    { "id": "fish_tikka", "name": "Fish Tikka", "category": "popular" },
+  
+    { "id": "paneer_chilli", "name": "Paneer Chilli", "category": "popular" },
+    { "id": "paneer_do_pyaza", "name": "Paneer Do Pyaza", "category": "popular" },
+  
+    { "id": "veg_fried_rice", "name": "Veg Fried Rice", "category": "popular" },
+    { "id": "egg_fried_rice", "name": "Egg Fried Rice", "category": "popular" },
+    { "id": "chicken_fried_rice", "name": "Chicken Fried Rice", "category": "popular" },
+  
+    { "id": "veg_noodles", "name": "Veg Noodles", "category": "popular" },
+    { "id": "egg_noodles", "name": "Egg Noodles", "category": "popular" },
+    { "id": "chicken_noodles", "name": "Chicken Noodles", "category": "popular" },
+  
+    { "id": "margherita_pizza", "name": "Margherita Pizza", "category": "popular" },
+    { "id": "farmhouse_pizza", "name": "Farmhouse Pizza", "category": "popular" },
+    { "id": "pepperoni_pizza", "name": "Pepperoni Pizza", "category": "popular" },
+  
+    { "id": "veg_burger", "name": "Veg Burger", "category": "popular" },
+    { "id": "chicken_burger", "name": "Chicken Burger", "category": "popular" },
+  
+    { "id": "club_sandwich", "name": "Club Sandwich", "category": "popular" },
+    { "id": "grilled_sandwich", "name": "Grilled Sandwich", "category": "popular" },
+  
+    { "id": "chicken_roll", "name": "Chicken Roll", "category": "popular" },
+    { "id": "paneer_roll", "name": "Paneer Roll", "category": "popular" },
+    { "id": "egg_roll", "name": "Egg Roll", "category": "popular" },
+  
+    { "id": "falooda", "name": "Falooda", "category": "dessert" },
+    { "id": "brownie", "name": "Brownie", "category": "dessert" },
+    { "id": "cake", "name": "Cake", "category": "dessert" },
+  
+    { "id": "tea", "name": "Tea", "category": "beverages" },
+    { "id": "coffee", "name": "Coffee", "category": "beverages" },
+    { "id": "soft_drinks", "name": "Soft Drinks", "category": "beverages" },
+    { "id": "smoothies", "name": "Smoothies", "category": "beverages" },
+  
+    { "id": "north_indian_thali", "name": "North Indian Thali", "category": "meal_type" },
+    { "id": "south_indian_thali", "name": "South Indian Thali", "category": "meal_type" },
+  
+    { "id": "buffet", "name": "Buffet", "category": "service" },
+    { "id": "catering", "name": "Catering", "category": "service" },
+  
+    { "id": "kids_meal", "name": "Kids Meal", "category": "meal_type" },
+  
+    { "id": "quick_delivery", "name": "Quick Delivery", "category": "service" },
+    { "id": "free_delivery", "name": "Free Delivery", "category": "offer" },
+  
+    { "id": "buy_one_get_one", "name": "Buy 1 Get 1", "category": "offer" },
+    { "id": "discount_offer", "name": "Discount Offer", "category": "offer" },
+  
+    { "id": "spicy_food", "name": "Spicy Food", "category": "flavor" },
+    { "id": "extra_spicy", "name": "Extra Spicy", "category": "flavor" },
+    { "id": "less_spicy", "name": "Less Spicy", "category": "flavor" },
+  
+    { "id": "comfort_food", "name": "Comfort Food", "category": "style" },
+    { "id": "street_style", "name": "Street Style", "category": "style" },
+  
+    { "id": "healthy_food", "name": "Healthy Food", "category": "diet" },
+    { "id": "low_calorie", "name": "Low Calorie", "category": "diet" },
+  
+    { "id": "weekend_special", "name": "Weekend Special", "category": "occasion" },
+    { "id": "festival_special", "name": "Festival Special", "category": "occasion" },
+  
+    { "id": "lunch_combo", "name": "Lunch Combo", "category": "meal_type" },
+    { "id": "dinner_combo", "name": "Dinner Combo", "category": "meal_type" },
+  
+    { "id": "office_lunch", "name": "Office Lunch", "category": "occasion" },
+    { "id": "family_pack", "name": "Family Pack", "category": "occasion" },
+  
+    { "id": "mini_meal", "name": "Mini Meal", "category": "meal_type" },
+    { "id": "value_meal", "name": "Value Meal", "category": "meal_type" },
+  
+    { "id": "late_night_food", "name": "Late Night Food", "category": "occasion" },
+    { "id": "midnight_delivery", "name": "Midnight Delivery", "category": "service" },
+  
+    { "id": "premium_dining", "name": "Premium Dining", "category": "price" },
+    { "id": "affordable", "name": "Affordable", "category": "price" },
+  
+    { "id": "quick_bites", "name": "Quick Bites", "category": "meal_type" },
+  
+    { "id": "best_for_couples", "name": "Best for Couples", "category": "occasion" },
+    { "id": "group_order", "name": "Group Order", "category": "occasion" },
+  
+    { "id": "takeaway_special", "name": "Takeaway Special", "category": "service" },
+  
+    { "id": "chef_special", "name": "Chef Special", "category": "offer" },
+    { "id": "limited_time", "name": "Limited Time Offer", "category": "offer" },
+  
+    { "id": "new_arrival", "name": "New Arrival", "category": "offer" },
+    { "id": "trending", "name": "Trending", "category": "offer" }
+  ]
