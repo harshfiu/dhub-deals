@@ -1,0 +1,16 @@
+{
+  "name": "dhub-deals-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev:customer": "npm run dev --workspace=apps/DealsCustomer",
+    "dev:vendor": "npm run dev --workspace=apps/DealsVendor",
+    "build:customer": "npm run build --workspace=apps/DealsCustomer",
+    "build:vendor": "npm run build --workspace=apps/DealsVendor",
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint --workspaces --if-present"
+  }
+}

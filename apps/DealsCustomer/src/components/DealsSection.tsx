@@ -203,7 +203,48 @@ export default function DealsSection({ deals }: DealsSectionProps) {
             Clear filters
           </button>
         </div>
-      )}
+
+        {/* Vendor groups */}
+        {grouped.size > 0 ? (
+          <div className="space-y-10">
+            {Array.from(grouped.entries()).map(([vendorName, deals]) => {
+              const r = deals[0].restaurant;
+              return (
+                <div key={vendorName}>
+                  {/* Vendor header */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="relative w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border-2 border-[#2DBCB0]">
+                      <img
+                        src={r.logoUrl}
+                        alt={vendorName}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="border-l-4 border-[#2DBCB0] pl-3">
+                      <p className="font-bold text-gray-900 text-base leading-tight">{vendorName}</p>
+                      <p className="text-xs text-gray-400 flex items-center gap-1 mt-0.5">
+                        <LocationPinIcon />
+                        {r.location} · {r.itemCount} items
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Items grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {deals.map(deal => (
+                      <DealCard key={deal.id} deal={deal} />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="text-center py-20 text-gray-400">
+            <p className="text-lg font-medium">No items found.</p>
+          </div>
+        )}
+      </div>
     </section>
   );
 }
