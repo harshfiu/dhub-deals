@@ -5,22 +5,27 @@
 @tailwind utilities;
 
 :root {
-  --brand-green: #008000;
-  --brand-accent: #f5a623;
+  --brand-teal: #2DBCB0;
+  --brand-teal-dark: #25A89C;
+  --brand-accent: #F5C518;
+  --brand-blue: #4BAEF5;
+  --brand-blue-dark: #2E9EE8;
 }
 
 body {
-  background-color: #EEF7EE;
-  font-family: 'Inter', 'Poppins', system-ui, sans-serif;
+  background-color: #F2F5F2;
+  font-family: 'Inter', system-ui, sans-serif;
   color: #1f2937;
 }
 
 @layer utilities {
-  .text-brand-green { color: #008000; }
-  .text-brand-accent { color: #f5a623; }
-  .bg-brand-green { background-color: #008000; }
-  .bg-brand-accent { background-color: #f5a623; }
-  .border-brand-green { border-color: #008000; }
+  .text-brand-teal  { color: #2DBCB0; }
+  .text-brand-accent { color: #F5C518; }
+  .text-brand-blue  { color: #4BAEF5; }
+  .bg-brand-teal    { background-color: #2DBCB0; }
+  .bg-brand-accent  { background-color: #F5C518; }
+  .bg-brand-blue    { background-color: #4BAEF5; }
+  .border-brand-teal { border-color: #2DBCB0; }
 
   .scrollbar-hide {
     -ms-overflow-style: none;

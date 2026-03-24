@@ -17,11 +17,7 @@ function ExpiryBadge({ endDate }: { endDate: string }) {
   if (days <= 0) return <span className="text-xs text-red-500 font-semibold">Expired</span>;
   if (days === 1) return <span className="text-xs text-red-500 font-semibold">Ends today!</span>;
   if (days <= 3)
-    return (
-      <span className="text-xs text-[#f5a623] font-semibold">
-        Ends in {days} days
-      </span>
-    );
+    return <span className="text-xs font-semibold" style={{ color: "#f5a623" }}>Ends in {days} days</span>;
   return (
     <span className="text-xs text-gray-400 font-medium">
       Valid until {new Date(endDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
@@ -31,14 +27,12 @@ function ExpiryBadge({ endDate }: { endDate: string }) {
 
 function DiscountBadge({ type, value }: { type: Deal["discountType"]; value: string }) {
   const colours: Record<Deal["discountType"], string> = {
-    percentage: "bg-[#008000] text-white",
-    flat: "bg-[#008000] text-white",
-    bogo: "bg-[#f5a623] text-white",
+    percentage: "bg-[#2DBCB0] text-white",
+    flat:       "bg-[#2DBCB0] text-white",
+    bogo:       "bg-[#f5a623] text-white",
   };
   return (
-    <span
-      className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-bold shadow ${colours[type]}`}
-    >
+    <span className={`absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-bold shadow ${colours[type]}`}>
       {value}
     </span>
   );
@@ -46,7 +40,7 @@ function DiscountBadge({ type, value }: { type: Deal["discountType"]; value: str
 
 function StarIcon() {
   return (
-    <svg className="w-3.5 h-3.5 text-[#f5a623] fill-current" viewBox="0 0 20 20">
+    <svg className="w-3.5 h-3.5 fill-current" style={{ color: "#f5a623" }} viewBox="0 0 20 20">
       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
     </svg>
   );
@@ -78,17 +72,13 @@ function ArrowRightIcon() {
 
 // ── main component ─────────────────────────────────────────────────────────
 
-interface DealCardProps {
-  deal: Deal;
-}
-
-export default function DealCard({ deal }: DealCardProps) {
+export default function DealCard({ deal }: { deal: Deal }) {
   const [expanded, setExpanded] = useState(false);
   const hasWebsite = Boolean(deal.restaurant.websiteUrl);
 
   return (
     <article className="group bg-white rounded-2xl overflow-hidden shadow-[0_2px_12px_0_rgba(0,0,0,0.07)] hover:shadow-[0_6px_24px_0_rgba(0,0,0,0.12)] transition-shadow duration-200 flex flex-col">
-      {/* ── Image (top ~48% of card) ──────────────────────────────────────── */}
+      {/* ── Image ────────────────────────────────────────────────────────── */}
       <div className="relative w-full aspect-[16/9] flex-shrink-0">
         <Image
           src={deal.imageUrl}
@@ -98,7 +88,6 @@ export default function DealCard({ deal }: DealCardProps) {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <DiscountBadge type={deal.discountType} value={deal.discountValue} />
-        {/* Cuisine tag */}
         <span className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-sm text-white text-xs font-medium">
           {deal.restaurant.cuisineTag}
         </span>
@@ -115,7 +104,7 @@ export default function DealCard({ deal }: DealCardProps) {
         {/* Description */}
         <p className="text-sm text-gray-500 leading-relaxed line-clamp-2">{deal.description}</p>
 
-        {/* ── Restaurant row ────────────────────────────────────────────── */}
+        {/* Restaurant row */}
         <div className="flex items-center gap-2.5 py-2.5 border-t border-b border-gray-100">
           <div className="relative w-9 h-9 rounded-full overflow-hidden flex-shrink-0 border border-gray-100">
             <Image
@@ -139,7 +128,8 @@ export default function DealCard({ deal }: DealCardProps) {
         {/* Terms collapsible */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="text-left text-xs text-[#008000] font-medium hover:underline focus:outline-none"
+          className="text-left text-xs font-medium hover:underline focus:outline-none"
+          style={{ color: "#2DBCB0" }}
         >
           {expanded ? "Hide terms ↑" : "View terms & conditions ↓"}
         </button>
@@ -149,45 +139,51 @@ export default function DealCard({ deal }: DealCardProps) {
           </p>
         )}
 
-        {/* ── CTA buttons ──────────────────────────────────────────────── */}
+        {/* CTA buttons */}
         <div className="mt-auto pt-1 flex flex-col gap-2">
           <div className="flex gap-2">
             {hasWebsite ? (
-              // Path A — vendor has website
               <a
                 href={deal.restaurant.websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#008000] text-white text-sm font-semibold hover:bg-[#006600] transition-colors shadow-sm shadow-[#008000]/20"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-white text-sm font-semibold whitespace-nowrap transition-colors shadow-sm"
+                style={{ backgroundColor: "#2DBCB0" }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#25A89C")}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#2DBCB0")}
               >
                 Order Now <ArrowRightIcon />
               </a>
             ) : (
-              // Path B — phone / walk-in
               <a
                 href={`tel:${deal.restaurant.phone}`}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-[#008000] text-white text-sm font-semibold hover:bg-[#006600] transition-colors shadow-sm shadow-[#008000]/20"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-full text-white text-sm font-semibold whitespace-nowrap transition-colors shadow-sm"
+                style={{ backgroundColor: "#2DBCB0" }}
+                onMouseEnter={e => (e.currentTarget.style.backgroundColor = "#25A89C")}
+                onMouseLeave={e => (e.currentTarget.style.backgroundColor = "#2DBCB0")}
               >
-                <PhoneIcon />
-                Call Now
+                <PhoneIcon /> Call Now
               </a>
             )}
-            {/* Get Directions — always present */}
             <a
               href={`https://maps.google.com/?q=${encodeURIComponent(deal.restaurant.address)}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full border border-[#008000] text-[#008000] text-sm font-semibold hover:bg-[#008000]/5 transition-colors"
+              className="flex-shrink-0 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-full border text-sm font-semibold whitespace-nowrap transition-colors"
+              style={{ borderColor: "#2DBCB0", color: "#2DBCB0" }}
+              onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#2DBCB0"; e.currentTarget.style.color = "#fff"; }}
+              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#2DBCB0"; }}
             >
               <DirectionsIcon />
-              <span className="hidden sm:inline">Directions</span>
+              Directions
             </a>
           </div>
 
-          {/* Phone number — always shown to keep uniform card height */}
           <a
             href={`tel:${deal.restaurant.phone}`}
-            className="inline-flex items-center justify-center gap-1.5 text-xs text-gray-400 hover:text-[#008000] transition-colors"
+            className="inline-flex items-center justify-center gap-1.5 text-xs text-gray-400 transition-colors"
+            onMouseEnter={e => (e.currentTarget.style.color = "#2DBCB0")}
+            onMouseLeave={e => (e.currentTarget.style.color = "")}
           >
             <PhoneIcon />
             {deal.restaurant.phone}
