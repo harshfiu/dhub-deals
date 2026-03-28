@@ -34,6 +34,11 @@ const dealSchema = z.object({
   discountValue: z.number().min(0),
   startDate:     z.string().datetime({ message: 'startDate must be ISO 8601, e.g. 2024-08-01T00:00:00.000Z' }),
   endDate:       z.string().datetime({ message: 'endDate must be ISO 8601.' }),
+  tags:          z.array(z.string()).optional(),
+  price:         z.number().optional(),
+  imageUrl:      z.string().optional(),
+  dietType:      z.string().optional(),
+  includes:      z.array(z.string()).optional(),
 });
 
 // ── Helper ─────────────────────────────────────────────────

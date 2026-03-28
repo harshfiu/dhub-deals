@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { deleteDeal } from "@/lib/api";
 import type { Deal } from "@/lib/api";
 
 interface DealCardProps {
   deal: Deal;
+  onDeleted?: (id: string) => void; // parent can remove card from list
 }
 
 const cardColors = [
@@ -17,50 +19,133 @@ const cardColors = [
 
 function EditIcon() {
   return (
-    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+    <svg
+      width="14"
+      height="14"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+      />
     </svg>
   );
 }
 
 function EyeIcon() {
   return (
-    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+    <svg
+      width="14"
+      height="14"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+      />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+      />
+    </svg>
+  );
+}
+
+function TrashIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+      />
     </svg>
   );
 }
 
 const statusConfig = {
-  Active:    { label: "Active",    bg: "bg-emerald-100", text: "text-emerald-700", dot: "bg-emerald-500" },
-  Scheduled: { label: "Scheduled", bg: "bg-blue-100",    text: "text-blue-700",    dot: "bg-blue-500"    },
-  Expired:   { label: "Expired",   bg: "bg-gray-100",    text: "text-gray-500",    dot: "bg-gray-400"    },
+  Active: {
+    label: "Active",
+    bg: "bg-emerald-100",
+    text: "text-emerald-700",
+    dot: "bg-emerald-500",
+  },
+  Scheduled: {
+    label: "Scheduled",
+    bg: "bg-blue-100",
+    text: "text-blue-700",
+    dot: "bg-blue-500",
+  },
+  Expired: {
+    label: "Expired",
+    bg: "bg-gray-100",
+    text: "text-gray-500",
+    dot: "bg-gray-400",
+  },
 };
 
 function discountLabel(deal: Deal): string {
   if (deal.discountType === "percentage") return `${deal.discountValue}% OFF`;
-  if (deal.discountType === "flat")       return `$${deal.discountValue} OFF`;
+  if (deal.discountType === "flat") return `$${deal.discountValue} OFF`;
   return "BOGO";
 }
 
-export default function DealCard({ deal }: DealCardProps) {
+export default function DealCard({ deal, onDeleted }: DealCardProps) {
   const router = useRouter();
   const [isActive, setIsActive] = useState(deal.status === "Active");
+  const [deleting, setDeleting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const colorIndex = deal.id % cardColors.length;
-  const color      = cardColors[colorIndex];
-  const status     = statusConfig[deal.status];
+  const color = cardColors[colorIndex];
+  const status = statusConfig[deal.status];
+
+  async function handleDelete() {
+    if (!confirm(`Delete "${deal.title}"? This cannot be undone.`)) return;
+    setDeleting(true);
+    setError(null);
+    try {
+      await deleteDeal(deal._id);
+      onDeleted?.(deal._id); // notify parent to remove from list
+    } catch (err: any) {
+      setError(err.message);
+      setDeleting(false);
+    }
+  }
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col">
+    <div
+      className={`bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden flex flex-col transition-opacity ${deleting ? "opacity-50 pointer-events-none" : ""}`}
+    >
       {/* Card header */}
       <div
         className="relative h-32 flex items-center justify-center"
         style={{ backgroundColor: color.bg }}
       >
-        <div className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-30" style={{ backgroundColor: color.pattern }} />
-        <div className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full opacity-20" style={{ backgroundColor: color.pattern }} />
+        <div
+          className="absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-30"
+          style={{ backgroundColor: color.pattern }}
+        />
+        <div
+          className="absolute -bottom-4 -left-4 w-16 h-16 rounded-full opacity-20"
+          style={{ backgroundColor: color.pattern }}
+        />
 
         <span
           className="relative z-10 px-4 py-2 rounded-full text-white font-bold text-lg tracking-wide"
@@ -69,28 +154,69 @@ export default function DealCard({ deal }: DealCardProps) {
           {discountLabel(deal)}
         </span>
 
-        <span className={`absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${status.bg} ${status.text}`}>
+        <span
+          className={`absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${status.bg} ${status.text}`}
+        >
           <span className={`w-1.5 h-1.5 rounded-full ${status.dot}`} />
           {status.label}
         </span>
+
+        {/* Delete button — top left of card header */}
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="absolute top-3 left-3 w-7 h-7 rounded-full bg-black/30 hover:bg-red-500 flex items-center justify-center text-white transition-colors"
+          aria-label="Delete deal"
+          title="Delete deal"
+        >
+          <TrashIcon />
+        </button>
       </div>
 
       {/* Card body */}
       <div className="p-4 flex flex-col gap-2 flex-1">
-        <h3 className="font-semibold text-gray-900 text-sm leading-snug">{deal.title}</h3>
+        <h3 className="font-semibold text-gray-900 text-sm leading-snug">
+          {deal.title}
+        </h3>
+
+        {error && <p className="text-xs text-red-500">{error}</p>}
 
         <div className="flex items-center gap-1 text-xs text-gray-500">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-5 5a2 2 0 01-2.828 0l-7-7A2 2 0 013 9.414V5a2 2 0 012-2z" />
+          <svg
+            width="12"
+            height="12"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-5 5a2 2 0 01-2.828 0l-7-7A2 2 0 013 9.414V5a2 2 0 012-2z"
+            />
           </svg>
           <span>{deal.discountDetails}</span>
         </div>
 
         <div className="flex items-center gap-1 text-xs text-gray-500">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          <svg
+            width="12"
+            height="12"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
           </svg>
-          <span>{deal.status === "Expired" ? "Expired" : "Expires"}: {deal.expiry}</span>
+          <span>
+            {deal.status === "Expired" ? "Expired" : "Expires"}: {deal.expiry}
+          </span>
         </div>
 
         <div className="flex items-center gap-1 text-xs text-gray-500">
@@ -104,8 +230,12 @@ export default function DealCard({ deal }: DealCardProps) {
             onClick={() => router.push(`/deals/${deal._id}/edit`)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white transition-colors"
             style={{ backgroundColor: "#3E867A" }}
-            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#2d6b60")}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#3E867A")}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = "#2d6b60")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = "#3E867A")
+            }
           >
             <EditIcon />
             Edit
@@ -119,8 +249,19 @@ export default function DealCard({ deal }: DealCardProps) {
                 : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
             }`}
           >
-            <span className={`w-3 h-3 rounded-full inline-block ${isActive ? "bg-gray-400" : "bg-emerald-500"}`} />
+            <span
+              className={`w-3 h-3 rounded-full inline-block ${isActive ? "bg-gray-400" : "bg-emerald-500"}`}
+            />
             {isActive ? "Deactivate" : "Activate"}
+          </button>
+
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-red-600 border border-red-100 hover:bg-red-50 transition-colors ml-auto disabled:opacity-50"
+          >
+            <TrashIcon />
+            {deleting ? "…" : "Delete"}
           </button>
         </div>
       </div>

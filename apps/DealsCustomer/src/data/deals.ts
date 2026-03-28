@@ -9,7 +9,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 export async function getDeals(): Promise<Deal[]> {
   try {
     const res = await fetch(`${API_URL}/api/deals/public`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
     if (!res.ok) throw new Error("Failed to fetch deals");
     const data = await res.json();
