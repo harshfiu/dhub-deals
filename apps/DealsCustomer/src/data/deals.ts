@@ -11,33 +11,39 @@ export async function getDeals(): Promise<Deal[]> {
     const res = await fetch(`${API_URL}/api/deals/public`, {
       next: { revalidate: 60 },
     });
-
     if (!res.ok) throw new Error("Failed to fetch deals");
-
     const data = await res.json();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return data.deals.map((d: any): Deal => ({
-      id:            d.id,
-      title:         d.title,
-      description:   d.description,
-      terms:         d.terms ?? "",
-      discountType:  d.discountType,
+      id:           d.id,
+      title:        d.title,
+      description:  d.description,
+      terms:        d.terms         ?? "",
+      discountType: d.discountType,
       discountValue:
         d.discountType === "percentage" ? `${d.discountValue}%` :
         d.discountType === "flat"       ? `$${d.discountValue} off` :
                                           "Buy 1 Get 1",
-      startDate:  d.startDate,
-      endDate:    d.endDate,
-      imageUrl:   d.imageUrl ?? "https://placehold.co/600x300/e8f5e9/008000?text=Deal",
+      startDate:    d.startDate,
+      endDate:      d.endDate,
+      orderTill:    d.orderTill     ?? d.endDate,
+      deliveryTime: d.deliveryTime  ?? d.endDate,
+      imageUrl:     d.imageUrl      ?? "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400&q=80",
+      price:        d.price         ?? 0,
+      quantityLeft: d.quantityLeft  ?? 99,
+      includes:     d.includes      ?? [],
+      dietType:     d.dietType,
       restaurant: {
         name:       d.vendor?.restaurantName ?? "Restaurant",
         logoUrl:    d.vendor?.logoUrl        ?? "https://placehold.co/100x100/008000/white?text=R",
-        address:    d.vendor?.address        ?? "123 Main St",
-        phone:      d.vendor?.phone          ?? "555-0000",
+        address:    d.vendor?.address        ?? "",
+        location:   d.vendor?.location       ?? "Local",
+        phone:      d.vendor?.phone          ?? "",
         websiteUrl: d.vendor?.websiteUrl,
         cuisineTag: d.vendor?.cuisineTag     ?? "Food",
         rating:     d.vendor?.rating         ?? 4.5,
+        itemCount:  d.vendor?.itemCount      ?? 0,
       },
     }));
   } catch (error) {
@@ -49,11 +55,9 @@ export async function getDeals(): Promise<Deal[]> {
 export async function trackView(dealId: string) {
   await fetch(`${API_URL}/api/deals/${dealId}/stats/view`, { method: "POST" }).catch(() => {});
 }
-
 export async function trackClick(dealId: string) {
   await fetch(`${API_URL}/api/deals/${dealId}/stats/click`, { method: "POST" }).catch(() => {});
 }
-
 export async function trackRedemption(dealId: string) {
   await fetch(`${API_URL}/api/deals/${dealId}/stats/redeem`, { method: "POST" }).catch(() => {});
 }

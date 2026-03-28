@@ -10,11 +10,9 @@ export function getToken(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem("dhub_token");
 }
-
 export function setToken(token: string): void {
   localStorage.setItem("dhub_token", token);
 }
-
 export function clearToken(): void {
   localStorage.removeItem("dhub_token");
 }
@@ -36,29 +34,35 @@ async function apiFetch<T>(path: string, options: RequestInit = {}): Promise<T> 
   return data;
 }
 
-// ── Types — match mockData.ts exactly so DealCard works ────
+// ── Types ──────────────────────────────────────────────────
 
 export type DealStatus   = "Active" | "Scheduled" | "Expired";
 export type DiscountType = "percentage" | "flat" | "bogo";
 
-// This matches the Deal interface in mockData.ts exactly
 export interface Deal {
-  id:              number;
+  id:              number;    // numeric index for card color cycling
+  _id:             string;    // real API string ID — use for all API calls
   title:           string;
+  description:     string;
+  terms:           string;
   discountType:    DiscountType;
   discountValue:   number;
   discountDetails: string;
   status:          DealStatus;
   expiry:          string;
-  views:           number;
-  redemptions:     number;
-  clicks:          number;
-  // Extra fields from API (not used by DealCard but good to keep)
-  _id:             string;   // original string id from API
-  description:     string;
-  terms:           string;
   startDate:       string;
   endDate:         string;
+  orderTill:       string;
+  deliveryTime:    string;
+  imageUrl:        string;
+  price:           number;
+  quantityLeft:    number;
+  includes:        string[];
+  dietType:        string | null;
+  tags:            string[];
+  views:           number;
+  clicks:          number;
+  redemptions:     number;
 }
 
 export interface Vendor {
@@ -66,6 +70,13 @@ export interface Vendor {
   email:          string;
   restaurantName: string;
   logoUrl:        string | null;
+  address:        string | null;
+  location:       string | null;
+  phone:          string | null;
+  websiteUrl:     string | null;
+  cuisineTag:     string | null;
+  rating:         number;
+  itemCount:      number;
 }
 
 export type CreateDealPayload = {
@@ -76,33 +87,46 @@ export type CreateDealPayload = {
   discountValue: number;
   startDate:     string;
   endDate:       string;
+  orderTill?:    string;
+  deliveryTime?: string;
+  imageUrl?:     string;
+  price?:        number;
+  quantityLeft?: number;
+  includes?:     string[];
+  dietType?:     string;
+  tags?:         string[];
+};
+
+export type UpdateVendorPayload = {
+  restaurantName?: string;
+  logoUrl?:        string;
+  address?:        string;
+  location?:       string;
+  phone?:          string;
+  websiteUrl?:     string;
+  cuisineTag?:     string;
 };
 
 // ── Helpers ────────────────────────────────────────────────
 
-// Formats the expiry string the same way mockData does: "Apr 15, 2026"
 function formatExpiry(endDate: string, status: DealStatus, startDate: string): string {
   const date = new Date(status === "Scheduled" ? startDate : endDate);
-  const formatted = date.toLocaleDateString("en-US", {
-    month: "short", day: "numeric", year: "numeric",
-  });
+  const formatted = date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   return status === "Scheduled" ? `Starts ${formatted}` : formatted;
 }
 
-// Builds the discountDetails string the same way mockData does
 function buildDiscountDetails(type: DiscountType, value: number, title: string): string {
   if (type === "percentage") return `${value}% off — ${title}`;
   if (type === "flat")       return `$${value} off — ${title}`;
   return title;
 }
 
-// Maps the raw API deal to the shape DealCard expects
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapDeal(d: any, index: number): Deal {
   const status: DealStatus = d.status;
   return {
-    id:              index,                         // DealCard uses id % colors.length for color
-    _id:             d.id,                          // keep original string id for API calls
+    id:              index,
+    _id:             d.id,
     title:           d.title,
     description:     d.description   ?? "",
     terms:           d.terms         ?? "",
@@ -113,9 +137,17 @@ function mapDeal(d: any, index: number): Deal {
     expiry:          formatExpiry(d.endDate, status, d.startDate),
     startDate:       d.startDate,
     endDate:         d.endDate,
-    views:           d.views        ?? 0,
-    clicks:          d.clicks       ?? 0,
-    redemptions:     d.redemptions  ?? 0,
+    orderTill:       d.orderTill     ?? d.endDate,
+    deliveryTime:    d.deliveryTime  ?? d.endDate,
+    imageUrl:        d.imageUrl      ?? "",
+    price:           d.price         ?? 0,
+    quantityLeft:    d.quantityLeft  ?? 0,
+    includes:        d.includes      ?? [],
+    dietType:        d.dietType      ?? null,
+    tags:            d.tags          ?? [],
+    views:           d.views         ?? 0,
+    clicks:          d.clicks        ?? 0,
+    redemptions:     d.redemptions   ?? 0,
   };
 }
 
@@ -131,11 +163,12 @@ export async function loginVendor(email: string, password: string): Promise<Vend
 }
 
 export async function signupVendor(
-  email: string, password: string, restaurantName: string, logoUrl?: string
+  email: string, password: string, restaurantName: string,
+  extras?: Partial<UpdateVendorPayload>
 ): Promise<Vendor> {
   const data = await apiFetch<{ token: string; vendor: Vendor }>("/api/auth/signup", {
     method: "POST",
-    body: JSON.stringify({ email, password, restaurantName, logoUrl }),
+    body: JSON.stringify({ email, password, restaurantName, ...extras }),
   });
   setToken(data.token);
   return data.vendor;
@@ -153,17 +186,17 @@ export function logoutVendor(): void {
 // ── Deals ──────────────────────────────────────────────────
 
 export async function fetchMyDeals(): Promise<Deal[]> {
-  const data = await apiFetch<{ deals: any[] }>("/api/deals");
-  return data.deals.map(mapDeal);
+  const data = await apiFetch<{ deals: unknown[] }>("/api/deals");
+  return (data.deals as any[]).map(mapDeal);
 }
 
 export async function fetchDealById(id: string): Promise<Deal> {
-  const data = await apiFetch<{ deal: any }>(`/api/deals/${id}`);
+  const data = await apiFetch<{ deal: unknown }>(`/api/deals/${id}`);
   return mapDeal(data.deal, 0);
 }
 
 export async function createDeal(payload: CreateDealPayload): Promise<Deal> {
-  const data = await apiFetch<{ deal: any }>("/api/deals", {
+  const data = await apiFetch<{ deal: unknown }>("/api/deals", {
     method: "POST",
     body: JSON.stringify(payload),
   });
@@ -171,7 +204,7 @@ export async function createDeal(payload: CreateDealPayload): Promise<Deal> {
 }
 
 export async function updateDeal(id: string, payload: Partial<CreateDealPayload>): Promise<Deal> {
-  const data = await apiFetch<{ deal: any }>(`/api/deals/${id}`, {
+  const data = await apiFetch<{ deal: unknown }>(`/api/deals/${id}`, {
     method: "PUT",
     body: JSON.stringify(payload),
   });
@@ -183,6 +216,6 @@ export async function deleteDeal(id: string): Promise<void> {
 }
 
 export async function fetchDealStats(id: string) {
-  const data = await apiFetch<{ stats: any }>(`/api/deals/${id}/stats`);
+  const data = await apiFetch<{ stats: unknown }>(`/api/deals/${id}/stats`);
   return data.stats;
 }

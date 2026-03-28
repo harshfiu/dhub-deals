@@ -13,6 +13,13 @@ model Vendor {
   password       String
   restaurantName String
   logoUrl        String?
+  address        String?
+  location       String?
+  phone          String?
+  websiteUrl     String?
+  cuisineTag     String?
+  rating         Float    @default(0)
+  itemCount      Int      @default(0)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
@@ -28,8 +35,15 @@ model Deal {
   discountValue Float
   startDate     DateTime
   endDate       DateTime
-  status        DealStatus   @default(Scheduled)
+  orderTill     DateTime?
+  deliveryTime  DateTime?
+  imageUrl      String?
+  price         Float        @default(0)
+  quantityLeft  Int          @default(0)
+  includes      String[]     @default([])
+  dietType      String?
   tags          String[]     @default([])
+  status        DealStatus   @default(Scheduled)
 
   views         Int          @default(0)
   clicks        Int          @default(0)

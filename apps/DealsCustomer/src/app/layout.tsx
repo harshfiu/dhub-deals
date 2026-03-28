@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ConditionalNavbar from "@/components/ConditionalNavbar";
 
 export const metadata: Metadata = {
   title: "DHub Deals — Discover Local Food Deals",
@@ -14,7 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-[#F2F5F2] antialiased">{children}</body>
+      <body className="bg-[#F2F5F2] antialiased">
+        <ConditionalNavbar />
+        {children}
+      </body>
     </html>
   );
 }
